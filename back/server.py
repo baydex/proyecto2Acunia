@@ -13,7 +13,7 @@ def getIP():
     s.close()
     return ip
 
-def threaded(c):
+def threaded(c,ip):
     while True:
   
         # data received from client
@@ -24,7 +24,7 @@ def threaded(c):
             # lock released on exit
             print_lock.release()
             break
-  
+        print("mensaje ",str(data),"ip:",ip)
         # reverse the given string from client
         data = data[::-1]
   
@@ -61,7 +61,7 @@ def Main():
         print('Connected to :', addr[0], ':', addr[1])
   
         # Start a new thread and return its identifier
-        start_new_thread(threaded, (c,))
+        start_new_thread(threaded, (c,addr[0]))
     s.close()
   
   

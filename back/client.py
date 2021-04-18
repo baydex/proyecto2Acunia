@@ -4,7 +4,7 @@ import socket
   
 def Main():
     # local host IP '127.0.0.1'
-    host = '10.0.0.19'
+    host = '10.0.0.10'
   
     # Define the port on which you want to connect
     port = 12345
