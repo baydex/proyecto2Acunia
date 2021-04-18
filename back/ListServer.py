@@ -24,14 +24,8 @@ def dic_keys_bytes(data):
     return bytes(str(keys(data)), "ascii")
 
 def threaded(c,ip):
-    
-    c.send(dic_keys_bytes(users))
     while True:
-        flag = users
-        time.sleep(1)
-        if flag != users:
-            for i in users:
-                users[i].send(dic_keys_bytes(users))
+        pass
     c.close()
 
 def Main():
@@ -45,14 +39,13 @@ def Main():
     s.listen(5)
     print("Esperando solicitudes")
     while True:
-        try:
-            c, addr = s.accept()
-            print('Connected to :', addr[0], ':', addr[1])
-            users[addr[0]] = c
-            threading.Thread(target=threaded
-                            ,args=(c,addr[0])).start()
-        except:
-            pass
+        c, addr = s.accept()
+        print('Connected to :', addr[0], ':', addr[1])
+        users[addr[0]] = c
+        threading.Thread(target=threaded
+                        ,args=(c,addr[0])).start()
+        for i in users:
+            users[i].send(dic_keys_bytes(users))
     s.close()
 
 if __name__ == '__main__':
