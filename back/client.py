@@ -1,6 +1,6 @@
 import socket
 def Main():
-    host = '10.0.0.10'
+    host = '10.0.0.19'
     port = 54321
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port))
