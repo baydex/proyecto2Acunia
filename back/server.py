@@ -1,4 +1,3 @@
-from _thread import *
 import threading
 import socket
 import json

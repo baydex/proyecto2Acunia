@@ -25,18 +25,23 @@ def dic_keys_bytes(data):
     return json_bytes(flagUsers)
 
 def threaded(c,ip):
-    while True:
-        data = c.recv(1024)
-        if not data:
-            print('Desconectado',ip)
-            users.pop(ip)
-            send_to_all(users)
-            break
-    c.close()
+    try:
+        while True:
+            data = c.recv(1024)
+            if not data:
+                print('Desconectado',ip)
+                users.pop(ip)
+                send_to_all(users)
+                break
+    except:
+        print('Desconectado',ip)
+        users.pop(ip)
+        send_to_all(users)
+        c.close()
 
 def send_to_all(users):
     for i in users:
-            users[i][0].send(dic_keys_bytes(users))
+        users[i][0].send(dic_keys_bytes(users))
 
 def Main():
     
@@ -56,7 +61,7 @@ def Main():
         print(users)
         send_to_all(users)
         threading.Thread(target=threaded
-                            ,args=(c)).start()
+                            ,args=(c, addr[0])).start()
     s.close()
 
 if __name__ == '__main__':
