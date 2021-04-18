@@ -44,6 +44,7 @@ def Main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("socket binded to port", port)
+    print("socket at host", host)
   
     # put the socket into listening mode
     s.listen(5)
