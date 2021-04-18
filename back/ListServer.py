@@ -37,3 +37,5 @@ def Main():
         start_new_thread(threaded, (c,addr[0]))
         users[addr[0]] = ""
     s.close()
+if __name__ == '__main__':
+    Main()
