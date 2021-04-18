@@ -14,11 +14,12 @@ def getIP():
     return ip
 
 def threaded(c,ip):
+    c.send(bytes(json.dumps(users), 'ascii'))
     while True:
         flag = users
         time.sleep(1)
         if(flag != users):
-            c.send(json.dumps(users))
+            c.send(bytes(json.dumps(users), 'ascii'))
     c.close()
     
 def Main():
