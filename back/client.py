@@ -1,7 +1,7 @@
 import socket
 def Main():
     host = '10.0.0.10'
-    port = 12345
+    port = 54321
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port))
     while True:
