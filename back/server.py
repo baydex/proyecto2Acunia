@@ -25,7 +25,7 @@ def threaded(c,ip):
 
 def Main():
     host = getIP()
-    port = 542312
+    port = 54321
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
     print("Servidor alojado en", host)
