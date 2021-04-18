@@ -1,5 +1,3 @@
-from _thread import *
-import threading
 import socket
 import json
 import time
@@ -20,8 +18,10 @@ def bytes_json(data):
     return json.loads(data.decode("ascii"))
 
 def dic_keys_bytes(data):
-    keys = lambda x: [i for i in x]
-    return bytes(str(keys(data)), "ascii")
+    flagUsers = {}
+    for i in users:
+        flagUsers[i] = users[i][1]
+    return json_bytes(flagUsers)
 
 def threaded(c,ip):
     while True:
@@ -41,11 +41,11 @@ def Main():
     while True:
         c, addr = s.accept()
         print('Connected to :', addr[0], ':', addr[1])
-        users[addr[0]] = c
-        threading.Thread(target=threaded
-                        ,args=(c,addr[0])).start()
+        name = c.recv(1024).decode("ascii")
+        users[addr[0]] = [c, name ]
+        print(users)
         for i in users:
-            users[i].send(dic_keys_bytes(users))
+            users[i][0].send(dic_keys_bytes(users))
     s.close()
 
 if __name__ == '__main__':
