@@ -1,6 +1,7 @@
 import socket
 import json
 import time
+import threading
 
 users = {}
 
@@ -25,8 +26,17 @@ def dic_keys_bytes(data):
 
 def threaded(c,ip):
     while True:
-        pass
+        data = c.recv(1024)
+        if not data:
+            print('Desconectado',ip)
+            users.pop(ip)
+            send_to_all(users)
+            break
     c.close()
+
+def send_to_all(users):
+    for i in users:
+            users[i][0].send(dic_keys_bytes(users))
 
 def Main():
     
@@ -44,8 +54,9 @@ def Main():
         name = c.recv(1024).decode("ascii")
         users[addr[0]] = [c, name ]
         print(users)
-        for i in users:
-            users[i][0].send(dic_keys_bytes(users))
+        send_to_all(users)
+        threading.Thread(target=threaded
+                            ,args=(c)).start()
     s.close()
 
 if __name__ == '__main__':

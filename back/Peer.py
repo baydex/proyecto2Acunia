@@ -14,10 +14,13 @@ def Main():
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port))
     s.send(bytes(name , "ascii"))
-    while True:
-        data = s.recv(1024)
-        print('Received from the server :', data.decode('ascii'))
-    s.close()
+    try:
+        while True:
+            data = s.recv(1024)
+            print('Received from the server :', data.decode('ascii'))
+    except KeyboardInterrupt:
+        s.send(b'')
+        s.close()
   
 if __name__ == '__main__':
     Main()
