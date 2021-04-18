@@ -1,6 +1,8 @@
 from _thread import *
 import threading
 import socket
+import json
+import time
 
 users = {}
 
@@ -11,16 +13,25 @@ def getIP():
     s.close()
     return ip
 
+def json_bytes(data):
+    return bytes( json.dumps(data)   , "ascii")
+
+def bytes_json(data):
+    return json.loads(data.decode("ascii"))
+
+def dic_keys_bytes(data):
+    keys = lambda x: [i for i in x]
+    return bytes(str(keys(data)), "ascii")
+
 def threaded(c,ip):
-    c.send(bytes(ip, 'ascii'))
+    
+    c.send(dic_keys_bytes(users))
     while True:
-        data = c.recv(1024)
-        if not data:
-            print('Desconectado',ip)
-            break
-        print("mensaje ",data.decode("ascii"),"ip:",ip)
-        for i in users:
-            users[i].send(data)
+        flag = users
+        time.sleep(1)
+        if flag != users:
+            for i in users:
+                users[i].send(dic_keys_bytes(users))
     c.close()
 
 def Main():
@@ -34,13 +45,12 @@ def Main():
     s.listen(5)
     print("Esperando solicitudes")
     while True:
-        print("ajua")
         try:
             c, addr = s.accept()
             print('Connected to :', addr[0], ':', addr[1])
+            users[addr[0]] = c
             threading.Thread(target=threaded
                             ,args=(c,addr[0])).start()
-            users[addr[0]] = c
         except:
             pass
     s.close()
