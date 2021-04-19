@@ -105,7 +105,9 @@ def Main():
             print('Connected to :', addr[0], ':', addr[1])
             users[addr[0]] = [c, name ]
             print(dic_keys_bytes(users))
-            send_to_all(users)
+            send_to_all(
+                dict(filter(lambda x: x[0] != addr[0], users.items()))
+                )
             threading.Thread(target=hilo
                                 ,args=(c, addr[0])).start()
     s.close()

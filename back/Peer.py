@@ -2,11 +2,23 @@ import socket
 import json
 import threading
 import time
+
+
+user_list = dict()
+
+def getIP(): # Obtengo mi ip
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = str(s.getsockname()[0])
+    s.close()
+    return ip
+
 def json_bytes(data):
     return bytes( json.dumps(data)   , "ascii")
 
 def bytes_json(data):
     return json.loads(data.decode("ascii"))
+
 def connectListServer(option):
     user = input("Ingresa el nombre de usuario\n")
     password = input("Ingresa la contraseña\n")
@@ -23,16 +35,29 @@ def connectListServer(option):
     s.send(auth)
     auth = s.recv(1024).decode("ascii")
     if auth == '1':
+        threading.Thread(target=menu).start()
         try:
             while True:
                 data = s.recv(1024)
-                print('Received from the server :', data.decode('ascii'))
+                # print('Received from the server :', data.decode('ascii'))
+                global user_list
+                user_list = bytes_json(data)
+                user_list = dict(filter(lambda x: x[0] != getIP(), user_list.items()))
         except KeyboardInterrupt:
             s.send(b'')
             s.close()
     else:
         print("Credenciales invalidas")
         s.close()
+
+def writer(ip_dest):
+    pass
+
+
+def menu():
+    threading.Thread(target=writer, args=ip_dest).start() #Un hilo se conecta al servidor de listas de IPs
+    threading.Thread(target=listener, args=ip_dest).start() #Un hilo se conecta al servidor de listas de IPs
+
 
 def Main():
     flag = True
@@ -43,6 +68,8 @@ def Main():
             flag = False
         else:
             print("Ingresa una opcion valida")
+    
+    
 
 if __name__ == '__main__':
     Main()
