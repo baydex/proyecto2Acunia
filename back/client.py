@@ -3,6 +3,7 @@ import json
 def Main():
     host = '10.0.0.19'
     port = 6666
+    nombre = input("Nombre? \n")
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port))
     ip = s.recv(1024).decode('ascii')
@@ -12,7 +13,8 @@ def Main():
             break
         data = {
             "name":ip,
-            "message": message
+            "message": message,
+            "nombre": nombre
         }
         data = bytes(json.dumps(data), 'ascii')
         s.send(data)

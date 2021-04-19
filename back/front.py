@@ -66,16 +66,23 @@ class Aplicacion():
             Label(self.newWindow, text="Escribe un mensaje", bg="white").pack(side=TOP, padx=10,pady=5)
             self.inputMessage = ttk.Entry(self.newWindow, width=160)
             self.inputMessage.pack(side=TOP, padx=10,pady=5)
-            ttk.Button(self.newWindow, text="Aceptar", command= lambda: threading.Thread(target=self.chatListener).start()).pack(side=TOP, padx=10,pady=5)
+            threading.Thread(target=self.chatListener).start()
+            ttk.Button(self.newWindow, text="Aceptar", command= lambda: self.sendMessage() ).pack(side=TOP, padx=10,pady=5)
 
         else:
             print("rechazado")
     def chatListener(self):
         while True:
-            data = self.c.recv(1024).decode("ascii")
+            data = self.c.recv(1024)
             print(data)
-            self.Chat.insert(INSERT, data)
-
+            data = bytes_json(data)
+            data = data["message"]
+            nombre = data["nombre"]
+            self.Chat.insert(END, "\n"+nombre+": "+data)
+            self.c.send(b'ok')
+    def sendMessage(self):
+        self.c.send(bytes(str(self.inputMessage.get()),"ascii") ) 
+        self.Chat.insert(INSERT, "\n"+self.name+": "+str(self.inputMessage.get()))
 
     def menu(self):
         self.w = threading.Thread(target=self.writer)
@@ -85,6 +92,7 @@ class Aplicacion():
 
     def connectListServer(self,option):
         user = input("Ingresa el nombre de usuario\n")
+        self.name = user
         password = input("Ingresa la contraseña\n")
         autentication = False
 
