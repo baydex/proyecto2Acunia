@@ -7,6 +7,8 @@ name = "pypi"
 django = "*"
 requests = "*"
 psycopg2 = "*"
+django-rest = "*"
+django-simple-history = "*"
 
 [dev-packages]
 
