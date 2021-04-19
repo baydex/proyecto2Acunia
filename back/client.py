@@ -2,7 +2,7 @@ import socket
 import json
 def Main():
     host = '10.0.0.19'
-    port = 54321
+    port = 6666
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port))
     ip = s.recv(1024).decode('ascii')

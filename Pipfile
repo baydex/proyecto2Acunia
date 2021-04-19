@@ -11,6 +11,7 @@ django-simple-history = "*"
 pillow = "*"
 django = "~=3.1"
 djangorestframework = "<=3.11"
+channels = "*"
 
 [dev-packages]
 
